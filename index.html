@@ -18,42 +18,62 @@
   <main class="container py-5">
     <div class="row justify-content-center">
       <div class="col-12 col-md-8 col-lg-6">
-        <div class="card shadow-sm">
-          <div class="card-body p-4">
-            <h1 class="h4 mb-4">Калькулятор</h1>
+        <div class="card shadow-sm calc-card">
+          <div class="card-body p-4 p-sm-4">
+            <h1 class="h4 mb-3 calc-title">Калькулятор</h1>
 
-            <div class="row g-3 align-items-start">
-              <div class="col-12 col-sm-5">
-                <input id="a" type="text" class="form-control" placeholder="Число 1" autocomplete="off" />
+            <div class="calc-panel rounded-4 p-3 p-sm-4">
+              <div class="row g-3 align-items-start">
+                <div class="col-12 col-sm-5">
+                  <div class="calc-field" id="field-a">
+                    <input id="a" type="text" class="form-control calc-control" placeholder="Число 1" autocomplete="off" />
+                    <div id="err-a" class="invalid-feedback calc-error"></div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-sm-2">
+                  <div class="calc-field">
+                    <input type="hidden" id="op" value="+" />
+
+                    <div class="dropdown">
+                      <button
+                        id="opBtn"
+                        class="btn calc-op w-100 dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                        aria-label="Операция"
+                      >+</button>
+
+                      <ul class="dropdown-menu calc-op-menu w-100">
+                        <li><button class="dropdown-item" type="button" data-op="+">+</button></li>
+                        <li><button class="dropdown-item" type="button" data-op="-">−</button></li>
+                        <li><button class="dropdown-item" type="button" data-op="*">×</button></li>
+                        <li><button class="dropdown-item" type="button" data-op="/">÷</button></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 col-sm-5">
+                  <div class="calc-field" id="field-b">
+                    <input id="b" type="text" class="form-control calc-control" placeholder="Число 2" autocomplete="off" />
+                    <div id="err-b" class="invalid-feedback calc-error"></div>
+                  </div>
+                </div>
               </div>
 
-              <div class="col-12 col-sm-2">
-                <select id="op" class="form-select">
-                  <option value="+">+</option>
-                  <option value="-">-</option>
-                  <option value="*">*</option>
-                  <option value="/">/</option>
-                </select>
-              </div>
+              <button id="btn" class="btn w-100 mt-3 calc-btn" type="button" disabled>
+                Получить результат
+              </button>
 
-              <div class="col-12 col-sm-5">
-                <input id="b" type="text" class="form-control" placeholder="Число 2" autocomplete="off" />
+              <div id="resultBox" class="mt-3 calc-result" aria-live="polite">
+                <div id="resultLines">—</div>
               </div>
             </div>
 
-            <button id="btn" class="btn btn-danger w-100 mt-3" type="button" disabled>
-              подсчитать
-            </button>
-
-            <div id="resultBox" class="border rounded p-3 mt-3 bg-light">
-              <div id="resultLines">—</div>
-            </div>
           </div>
         </div>
-
-        <p class="text-muted small mt-3 mb-0">
-          Вводи числа → выбирай операцию → жми «подсчитать».
-        </p>
       </div>
     </div>
   </main>

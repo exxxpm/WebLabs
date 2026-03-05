@@ -1,20 +1,11 @@
 $(function () {
   const $a = $("#a");
   const $b = $("#b");
-  const $op = $("#op");     
-  const $opBtn = $("#opBtn");
+  const $op = $("#op");
   const $btn = $("#btn");
-
-  const $fieldA = $("#field-a");
-  const $fieldB = $("#field-b");
-
-  const $errA = $("#err-a");
-  const $errB = $("#err-b");
-
-  const $resultBox = $("#resultBox");
   const $resultLines = $("#resultLines");
 
-  const HISTORY_LIMIT = 5;
+  const LIMIT = 5;
   const history = [];
 
   function normalize(s) {
@@ -31,10 +22,10 @@ $(function () {
 
   function parseNumber(raw) {
     const s = normalize(raw);
-    if (!s) return { ok: false, err: "Введите число" };
-    if (!isValidNumberString(s)) return { ok: false, err: "Неверный формат" };
+    if (!s) return { ok: false };
+    if (!isValidNumberString(s)) return { ok: false };
     const n = Number(s);
-    if (!Number.isFinite(n)) return { ok: false, err: "Слишком большое" };
+    if (!Number.isFinite(n)) return { ok: false };
     return { ok: true, value: n, norm: s };
   }
 
@@ -43,61 +34,32 @@ $(function () {
     return (Math.round(n * 1e12) / 1e12).toString();
   }
 
-  function shake($field) {
-    $field.removeClass("shake");
-    void $field[0].offsetWidth;
-    $field.addClass("shake");
-  }
-
-  function setInvalid($input, $err, msg, $field) {
-    $input.addClass("is-invalid");
-    $err.text(msg || "");
-    shake($field);
-  }
-
-  function clearInvalid($input, $err) {
-    $input.removeClass("is-invalid");
-    $err.text("");
-  }
-
-  function renderHistory() {
+  function render() {
     if (!history.length) {
-      $resultLines.text("—");
+      $resultLines.html(`<div class="line line--now">—</div>`);
       return;
     }
-    $resultLines.html(history.map(h => `<div class="line">${h}</div>`).join(""));
+
+    $resultLines.html(
+      history.map((h, i) => {
+        const cls = (i === history.length - 1) ? "line--now" : "line--old";
+        return `<div class="line ${cls}">${h}</div>`;
+      }).join("")
+    );
   }
 
-  function setOp(op) {
-    $op.val(op);
-    const show = (op === "*") ? "×" : (op === "/") ? "÷" : (op === "-") ? "−" : "+";
-    $opBtn.text(show);
-  }
-
-  function validateLive() {
+  function validate() {
     const pa = parseNumber($a.val());
     const pb = parseNumber($b.val());
     const op = $op.val();
 
-    if (!$a.val().trim()) clearInvalid($a, $errA);
-    else if (!pa.ok) setInvalid($a, $errA, pa.err, $fieldA);
-    else clearInvalid($a, $errA);
-
-    if (!$b.val().trim()) clearInvalid($b, $errB);
-    else if (!pb.ok) setInvalid($b, $errB, pb.err, $fieldB);
-    else clearInvalid($b, $errB);
-
-    if (pa.ok && pb.ok && op === "/" && pb.value === 0) {
-      setInvalid($b, $errB, "Деление на ноль", $fieldB);
-    }
-
-    const can = pa.ok && pb.ok && !(op === "/" && pb.ok && pb.value === 0);
+    const can = pa.ok && pb.ok && !(op === "/" && pb.value === 0);
     $btn.prop("disabled", !can);
     return can;
   }
 
   function compute() {
-    if (!validateLive()) return;
+    if (!validate()) return;
 
     const pa = parseNumber($a.val());
     const pb = parseNumber($b.val());
@@ -111,26 +73,18 @@ $(function () {
       case "/": r = pa.value / pb.value; break;
     }
 
-    const viewOp = (op === "*") ? "×" : (op === "/") ? "÷" : (op === "-") ? "−" : "+";
-    const line = `${pa.norm} ${viewOp} ${pb.norm} = ${formatNumber(r)}`;
+    const line = `${pa.norm} ${op} ${pb.norm} = ${formatNumber(r)}`;
 
-    history.unshift(line);
-    if (history.length > HISTORY_LIMIT) history.length = HISTORY_LIMIT;
+    history.push(line);
+    if (history.length > LIMIT) history.splice(0, history.length - LIMIT);
 
-    renderHistory();
-
-    $resultBox.removeClass("pop");
-    void $resultBox[0].offsetWidth;
-    $resultBox.addClass("pop");
+    render();
   }
 
-  $(".calc-op-menu [data-op]").on("click", function () {
-    setOp($(this).data("op"));
-    validateLive();
-  });
+  $a.on("input", validate);
+  $b.on("input", validate);
+  $op.on("change", validate);
 
-  $a.on("input", validateLive);
-  $b.on("input", validateLive);
   $btn.on("click", compute);
 
   $a.add($b).on("keydown", function (e) {
@@ -140,7 +94,6 @@ $(function () {
     }
   });
 
-  setOp($op.val() || "+");
-  renderHistory();
-  validateLive();
+  render();
+  validate();
 });

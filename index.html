@@ -1,50 +1,50 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
 
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
-    crossorigin="anonymous"
-  >
+    <link
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+        crossorigin="anonymous"
+    >
 
-  <link rel="stylesheet" href="./style.css" />
+    <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
+    <main class="page">
+        <section class="calc">
+            <div class="calc__row">
+                <input id="a" class="ctrl" type="number" placeholder="Число 1" autocomplete="off" />
 
-  <main class="page">
-    <section class="calc">
-      <div class="calc__row">
-        <input id="a" class="ctrl" type="text" placeholder="Число 1" autocomplete="off" />
+                <select id="op" class="ctrl ctrl--select" aria-label="Операция">
+                    <option value="+">+</option>
+                    <option value="-">−</option>
+                    <option value="*">*</option>
+                    <option value="/">/</option>
+                </select>
 
-        <select id="op" class="ctrl ctrl--select" aria-label="Операция">
-          <option value="+">+</option>
-          <option value="-">−</option>
-          <option value="*">*</option>
-          <option value="/">/</option>
-        </select>
+                <input id="b" class="ctrl" type="number" placeholder="Число 2" autocomplete="off" />
+            </div>
 
-        <input id="b" class="ctrl" type="text" placeholder="Число 2" autocomplete="off" />
-      </div>
+            <button id="btn" class="btnx" type="button" disabled>подсчитать</button>
 
-      <button id="btn" class="btnx" type="button" disabled>подсчитать</button>
+            <div class="result" aria-live="polite">
+                <div id="resultLines">
+                    <div class="line line--now">—</div>
+                </div>
+            </div>
+        </section>
+    </main>
 
-      <div class="result" aria-live="polite">
-        <div id="resultLines">
-          <div class="line line--now">—</div>
-        </div>
-      </div>
-    </section>
-  </main>
+    <script
+        src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"
+    ></script>
 
-  <script
-    src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
-    crossorigin="anonymous"></script>
-
-  <script src="./script.js"></script>
+    <script src="./script.js"></script>
 </body>
 </html>
